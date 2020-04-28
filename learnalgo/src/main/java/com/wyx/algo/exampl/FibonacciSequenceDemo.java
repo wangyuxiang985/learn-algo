@@ -1,4 +1,4 @@
-package com.wyx.algo;
+package com.wyx.algo.exampl;
 
 /**
  * @ClassName FibonacciSequenceDemo
