@@ -31,7 +31,7 @@ public class HuiSuWenTi {
 //        int[] nums = new int[]{1, 2, 3};
 //        List<List<Integer>> lists = quanPaiLei(nums);
 //        System.out.println(lists);
-        List<char[][]> lists = huangHou(8);
+        List<char[][]> lists = huangHou(10);
         System.out.println(lists.size());
     }
 
@@ -86,11 +86,11 @@ public class HuiSuWenTi {
             }
         }
         //检查行是否有皇后冲突
-        for (int i = 0; i < cur[row].length; i++) {
-            if (cur[row][i] == 'Q') {
-                return false;
-            }
-        }
+//        for (int i = 0; i < cur[row].length; i++) {
+//            if (cur[row][i] == 'Q') {
+//                return false;
+//            }
+//        }
         //检查右上方是否有皇后冲突
         for (int i = row - 1, j = col + 1;
              i >= 0 && j < n; i--, j++) {
