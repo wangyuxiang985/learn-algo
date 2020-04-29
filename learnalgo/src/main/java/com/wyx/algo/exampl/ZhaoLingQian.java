@@ -16,7 +16,7 @@ package com.wyx.algo.exampl;
 public class ZhaoLingQian {
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
-        System.out.println(coinChange1(new int[]{1,2,3,4,5,6,7}, 23));
+        System.out.println(coinChange2(new int[]{1,2,5}, 11));
         System.out.println("耗时：" + (System.currentTimeMillis()-startTime));
     }
 
@@ -41,5 +41,43 @@ public class ZhaoLingQian {
             res = subProblem < res ? subProblem + 1 : res;
         }
         return res != Integer.MAX_VALUE ? res : -1;
+    }
+
+    /**
+     * 带备忘录的递归
+     * 消除了子问题的冗余，所以子问题总数不会超过金额数 n，即子问题数目为 O(n)。
+     * 处理一个子问题的时间不变，仍是 O(k)，所以总的时间复杂度是 O(kn)。
+     **/
+    private static int coinChange2(int[] coins, int amount) {
+
+        if (amount < 0) {
+            return -1;
+        }
+        int[] memo = new int[amount + 1];
+        int helper = helper(memo, coins, amount);
+        return helper;
+    }
+
+    private static int helper(int[] memo, int[] coins, int amount) {
+        if (amount < 0) {
+            return -1;
+        }
+        if (memo[amount] != 0) {
+            return memo[amount];
+        }
+        if (0 == amount) {
+            return 0;
+        }
+        int res = Integer.MAX_VALUE;
+        for (int coin : coins) {
+            int subProblem = helper(memo, coins, amount - coin);
+            if (subProblem == -1) {
+                continue;
+            }
+            res = subProblem < res ? subProblem + 1 : res;
+            //记录备忘录
+            memo[amount] = res != Integer.MAX_VALUE ? res : -1;
+        }
+        return memo[amount];
     }
 }
