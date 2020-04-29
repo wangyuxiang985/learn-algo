@@ -16,7 +16,7 @@ package com.wyx.algo.exampl;
 public class ZhaoLingQian {
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
-        System.out.println(coinChange2(new int[]{1,2,5}, 11));
+        System.out.println(coinChange3(new int[]{1,2,5}, 20));
         System.out.println("耗时：" + (System.currentTimeMillis()-startTime));
     }
 
@@ -44,7 +44,7 @@ public class ZhaoLingQian {
     }
 
     /**
-     * 带备忘录的递归
+     * 带备忘录的递归 自顶向下
      * 消除了子问题的冗余，所以子问题总数不会超过金额数 n，即子问题数目为 O(n)。
      * 处理一个子问题的时间不变，仍是 O(k)，所以总的时间复杂度是 O(kn)。
      **/
@@ -79,5 +79,29 @@ public class ZhaoLingQian {
             memo[amount] = res != Integer.MAX_VALUE ? res : -1;
         }
         return memo[amount];
+    }
+
+    /**
+     * dp 数组的迭代解法 自底向上
+     * dp[i] = x 表示，当目标金额为 i 时，至少需要 x 枚硬币
+     *
+     **/
+    private static int coinChange3(int[] coins, int amount) {
+
+        int[] dp = new int[amount + 1];
+        for (int i = 0; i < dp.length; i++) {
+            dp[i] = amount + 1;
+        }
+        dp[0] = 0;
+        for (int i = 0; i < dp.length; i++) {
+            // 内层 for 在求所有子问题 + 1 的最小值
+            for (int coin : coins) {
+                if (i - coin < 0) {
+                    continue;
+                }
+                dp[i] = dp[i] < dp[i - coin] + 1 ? dp[i] : dp[i - coin] + 1;
+            }
+        }
+        return dp[amount] == amount + 1 ? -1 : dp[amount];
     }
 }
