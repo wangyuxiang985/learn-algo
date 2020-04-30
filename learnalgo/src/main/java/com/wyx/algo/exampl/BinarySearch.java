@@ -11,7 +11,7 @@ public class BinarySearch {
 
     public static void main(String[] args) {
         int[] nums = new int[]{1, 2, 2, 2, 5};
-        System.out.println(binarySearch2(nums, 2));
+        System.out.println(binarySearch3(nums, 9));
     }
 
     /**
@@ -41,7 +41,7 @@ public class BinarySearch {
     }
 
     /**
-     * 寻找一个数（寻找左侧边界）例：1
+     * 寻找一个数（寻找左侧边界）
      * 搜索一个数，如果存在，返回其索引，否则返回 -1
      * 采用[left, right) 这个区间其实就是每次进行搜索的区间。
      * 有序数组 nums = [1,2,2,2,3]，target 为 2，此算法返回的索引是 1；
@@ -65,5 +65,36 @@ public class BinarySearch {
             return -1;
         }
         return nums[left] == target ? left : -1;
+    }
+
+    /**
+     * 寻找一个数（寻找右侧边界）
+     * 搜索一个数，如果存在，返回其索引，否则返回 -1
+     * 采用（left, right] 这个区间其实就是每次进行搜索的区间。
+     * 有序数组 nums = [1,2,2,2,3]，target 为 2，此算法返回的索引是 3；
+     */
+    private static int binarySearch3(int[] nums, int target) {
+        if (nums.length == 0) {
+            return -1;
+        }
+        int left = 0;
+        int right = nums.length;
+
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (target == nums[mid]) {
+                left = mid +1;
+            } else if (target > nums[mid]) {
+                //右边
+                left = mid + 1;
+            } else if (target < nums[mid]) {
+                //左边
+                right = mid;
+            }
+        }
+        if (left == 0) {
+            return -1;
+        }
+        return nums[left - 1] == target ? left - 1 : -1;
     }
 }
