@@ -2,7 +2,9 @@ package com.wyx.algo.exampl;
 
 import com.sun.java.swing.plaf.windows.resources.windows;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,9 +48,12 @@ public class SlidingWindow {
 //        String s = "ADOBECODEBANC";
 //        String t = "ABC";
 //        System.out.println(slidingWindow1(s, t));
-        String s1 = "ab";
-        String s2 = "eidbaooo";
-        System.out.println(slidingWindow2(s1, s2));
+//        String s1 = "ab";
+//        String s2 = "eidbaooo";
+//        System.out.println(slidingWindow2(s1, s2));
+        String s = "cbaebabacd";
+        String t = "abc";
+        System.out.println(slidingWindow3(s, t));
     }
 
     /**
@@ -161,5 +166,66 @@ public class SlidingWindow {
         }
         // 未找到符合条件的子串
         return false;
+    }
+
+    /**
+     * 找出所有字母异位词
+     * 给定一个字符串S和一个非空字符串P，找到S中所有是P的字母异位词的子串，返回这些子串的起始索引，
+     * 字符串只包含小写英文字母，并且字符串S和P的长度不超过20100
+     * 说明：字母异位词指字母相同，但排列不同的字符串
+     *      不考虑答案输出的顺序
+     * 例：
+     * S="cbaebabacd" ; P="abc"
+     * 输出：[0,6]
+     * 起始位置为0的字串“cba”，它是字符串“abc”的字母异位词
+     * 起始位置为6的子串“bac”，它是字符串“abc”的字母异位词
+     * -----
+     * 相当于：输入一个串 S，一个串 T，找到 S 中所有 T 的排列，返回它们的起始索引。
+     **/
+    @SuppressWarnings("all")
+    private static List<Integer> slidingWindow3(String s, String t) {
+        //初始化need和windows窗口
+        Map<Character, Integer> need = new HashMap<Character, Integer>();
+        Map<Character, Integer> windows = new HashMap<Character, Integer>();
+        List<Integer> res = new ArrayList<Integer>();//记录结果
+        char[] chars = t.toCharArray();
+        for (char aChar : chars) {
+            need.put(aChar, need.getOrDefault(aChar, 0) + 1);
+        }
+        int left = 0;
+        int right = 0;
+        int valid = 0;
+        char[] chars1 = s.toCharArray();
+        while (right < s.length()) {
+            //c 是将移入窗口的字符
+            char c = chars1[right];
+            //右移窗口
+            right++;
+            //// 进行窗口内数据的一系列更新
+            if (need.containsKey(c)) {
+                windows.put(c, windows.getOrDefault(c,0) + 1);
+                if (windows.get(c).equals(need.get(c))) {
+                    valid++;
+                }
+            }
+            // 判断左侧窗口是否要收缩
+            while (right - left >= t.length()) {
+                if (valid == need.size()) {
+                    // 当窗口符合条件时，把起始索引加入 res
+                    res.add(left);
+                }
+                char d = chars1[left];
+                left++;
+                //进行窗口内一系列更新
+                if (need.containsKey(d)) {
+                    if (windows.get(d).equals(need.get(d))) {
+                        valid--;
+                    }
+                    windows.put(d, windows.get(d) - 1);
+                }
+            }
+        }
+        // 未找到符合条件的子串
+        return res;
     }
 }
