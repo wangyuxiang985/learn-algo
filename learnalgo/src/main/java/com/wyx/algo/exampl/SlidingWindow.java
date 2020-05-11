@@ -51,9 +51,11 @@ public class SlidingWindow {
 //        String s1 = "ab";
 //        String s2 = "eidbaooo";
 //        System.out.println(slidingWindow2(s1, s2));
-        String s = "cbaebabacd";
-        String t = "abc";
-        System.out.println(slidingWindow3(s, t));
+//        String s = "cbaebabacd";
+//        String t = "abc";
+//        System.out.println(slidingWindow3(s, t));
+        String s = "bbbbb";
+        System.out.println(lengthOfLongestSubstring(s));
     }
 
     /**
@@ -226,6 +228,42 @@ public class SlidingWindow {
             }
         }
         // 未找到符合条件的子串
+        return res;
+    }
+
+    /**
+     * 最长无重复子串
+     * 给定一个字符串，请找出其中不含有重复字符的最长子串的长度
+     * 示例： s="abcabcbb" 输出3，最长无重复子串abc，长度3
+     * s="bbb" ,输出1，最长无重复子串b，长度1
+     * 输入的 s1 是可以包含重复字符的
+     **/
+    @SuppressWarnings("all")
+    private static int lengthOfLongestSubstring(String s) {
+        //初始化need和windows窗口
+        Map<Character, Integer> windows = new HashMap<Character, Integer>();
+
+        int left = 0;
+        int right = 0;
+        int res = 0;//记录结果
+        char[] chars1 = s.toCharArray();
+        while (right < s.length()) {
+            //c 是将移入窗口的字符
+            char c = chars1[right];
+            //右移窗口
+            right++;
+            // 进行窗口内数据的一系列更新
+            windows.put(c, windows.getOrDefault(c, 0) + 1);
+            // 判断左侧窗口是否要收缩
+            while (windows.get(c) > 1) {
+                //窗口中存在重复字符
+                char d = chars1[left];
+                left++;
+                //进行窗口内的数据的更新
+                windows.put(d, windows.get(d) - 1);
+            }
+            res = res > right - left ? res : right - left;
+        }
         return res;
     }
 }
