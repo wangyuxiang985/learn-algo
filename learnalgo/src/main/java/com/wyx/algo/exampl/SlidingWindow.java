@@ -1,5 +1,7 @@
 package com.wyx.algo.exampl;
 
+import com.sun.java.swing.plaf.windows.resources.windows;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,9 +43,12 @@ import java.util.Map;
  **/
 public class SlidingWindow {
     public static void main(String[] args) {
-        String s = "ADOBECODEBANC";
-        String t = "ABC";
-        System.out.println(slidingWindow1(s, t));
+//        String s = "ADOBECODEBANC";
+//        String t = "ABC";
+//        System.out.println(slidingWindow1(s, t));
+        String s1 = "ab";
+        String s2 = "eidbaooo";
+        System.out.println(slidingWindow2(s1, s2));
     }
 
     /**
@@ -83,6 +88,7 @@ public class SlidingWindow {
                 }
             }
             // 判断左侧窗口是否要收缩
+            //当 valid == need.size() 时，说明 T 中所有字符已经被覆盖，已经得到一个可行的覆盖子串，现在应该开始收缩窗口了，以便得到「最小覆盖子串」
             while (valid == need.size()) {
                 // 在这里更新最小覆盖子串
                 if (right - left < len) {
@@ -104,5 +110,56 @@ public class SlidingWindow {
         }
         // 返回最小覆盖子串
         return len == Integer.MAX_VALUE ? "" : s.substring(start,start + len);
+    }
+
+    /**
+     * 给定两个字符串s1和s2，写一个函数来判断s2是否包含s1的排列 ，换句话说，第一个字符串的排列之一是第二个字符串的子串
+     * 实例： s1="ab", s2="eidbaooo" 输出：true s2包含s1的排列之一（ba）
+     * s1="ab", s2="eidboaoo" 输出：false
+     * 输入的 s1 是可以包含重复字符的
+     **/
+    @SuppressWarnings("all")
+    private static boolean slidingWindow2(String s1, String s2) {
+        //初始化need和windows窗口
+        Map<Character, Integer> need = new HashMap<Character, Integer>();
+        Map<Character, Integer> windows = new HashMap<Character, Integer>();
+        char[] chars = s1.toCharArray();
+        for (char aChar : chars) {
+            need.put(aChar, need.getOrDefault(aChar, 0) + 1);
+        }
+        int left = 0;
+        int right = 0;
+        int valid = 0;
+        char[] chars1 = s2.toCharArray();
+        while (right < s2.length()) {
+            //c 是将移入窗口的字符
+            char c = chars1[right];
+            //右移窗口
+            right++;
+            //// 进行窗口内数据的一系列更新
+            if (need.containsKey(c)) {
+                windows.put(c, windows.getOrDefault(c,0) + 1);
+                if (windows.get(c).equals(need.get(c))) {
+                    valid++;
+                }
+            }
+            // 判断左侧窗口是否要收缩
+            while (right - left >= s1.length()) {
+                if (valid == need.size()) {
+                    return true;
+                }
+                char d = chars1[left];
+                left++;
+                //进行窗口内一系列更新
+                if (need.containsKey(d)) {
+                    if (windows.get(d).equals(need.get(d))) {
+                        valid--;
+                    }
+                    windows.put(d, windows.get(d) - 1);
+                }
+            }
+        }
+        // 未找到符合条件的子串
+        return false;
     }
 }
