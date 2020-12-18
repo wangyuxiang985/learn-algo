@@ -50,7 +50,7 @@ public class QuJianDemo {
         while (i < a.length && j < a.length) {
             //如果交集区间是 [c1,c2]，那么 c1=max(a1,b1)，c2=min(a2,b2)
             int a1 = a[i][0], a2 = a[i][1];
-            int b1 = b[i][0], b2 = b[i][1];
+            int b1 = b[j][0], b2 = b[j][1];
             if (b2 >= a1 && a2 >= b1) {
                 res.add(new int[]{Math.max(a1, b1), Math.min(a2, b2)});
             }
