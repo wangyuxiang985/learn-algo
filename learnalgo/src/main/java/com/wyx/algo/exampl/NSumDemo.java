@@ -17,11 +17,90 @@ public class NSumDemo {
 //        int target = 9;
 //        int[] ints = twoSum(nums, target);
 //        System.out.println(Arrays.toString(ints));
-        int[] nums = {1, 3, 1, 2, 2, 3};
-        int target = 4;
-        List<int[]> list = twoSumPlus(nums, target);
+//        int[] nums = {1, 3, 1, 2, 2, 3};
+//        int target = 4;
+//        List<int[]> list = twoSumPlus(nums, target);
+//        list.forEach(ints -> System.out.println(Arrays.toString(ints)));
+        int[] nums = {-1, 0, 1, 2, -1, -4};
+        int target = 0;
+        List<int[]> list = threeSumPlus(nums, target);
         list.forEach(ints -> System.out.println(Arrays.toString(ints)));
+
     }
+
+    /*
+     * 给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = target ？找出所有满足条件且不重复的三元组。
+     * 注意：答案中不可以包含重复的三元组。
+     * target=0
+     * nums = [-1, 0, 1, 2, -1, -4]
+     * [[-1, 0, 1],[-1, -1, 2]]
+     *
+    **/
+    private static List<int[]> threeSumPlus(int[] nums, int target) {
+        if (Objects.isNull(nums)) {
+            return new ArrayList<>();
+        }
+        //数组排序
+        Arrays.sort(nums);
+        int length = nums.length;
+        List<int[]> res = new ArrayList<>(10);
+        // 穷举第一个数，后两个求和
+        for (int i = 0; i < length; i++) {
+
+            List<int[]> twoSumList = twoSum(nums, i + 1, target - nums[i]);
+            //如果存在满足条件的二元数组，再加上nums[i]就是结果
+            for (int[] ints : twoSumList) {
+                List<Integer> tmpList = new ArrayList<Integer>(10){{
+                    add(ints[0]);
+                    add(ints[1]);
+                }};
+                tmpList.add(nums[i]);
+                res.add(new int[]{
+                    tmpList.get(0), tmpList.get(1), tmpList.get(2)});
+            }
+            //跳过第一个数字重复的情况，否则有重复结果
+            while (i < length - 1 && nums[i] == nums[i + 1]) {
+                i++;
+            }
+        }
+        return res;
+    }
+
+    private static List<int[]> twoSum(int[] nums, int start, int target) {
+        if (Objects.isNull(nums)) {
+            return new ArrayList<>();
+        }
+        //先排序
+        Arrays.sort(nums);
+        List<int[]> res = new ArrayList<>(10);
+        //左右指针
+        int left = start, right = nums.length - 1;
+        while (left < right) {
+            int sum = nums[left] + nums[right];
+            //记录左右指针对应的值
+            int leftValue = nums[left], rightValue = nums[right];
+            if (sum < target) {
+                while (left < right && nums[left] == leftValue) {
+                    left++;
+                }
+            } else if (sum > target) {
+                while (left < right && nums[right] == rightValue) {
+                    right--;
+                }
+            } else {
+                res.add(new int[]{leftValue, rightValue});
+                //需要跳过所有重复的元素
+                while (left < right && nums[left] == leftValue) {
+                    left++;
+                }
+                while (left < right && nums[right] == rightValue) {
+                    right--;
+                }
+            }
+        }
+        return res;
+    }
+
 
 
     /*
