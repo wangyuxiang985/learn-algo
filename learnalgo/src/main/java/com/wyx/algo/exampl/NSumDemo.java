@@ -1,6 +1,9 @@
 package com.wyx.algo.exampl;
 
+import java.sql.SQLOutput;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -13,10 +16,14 @@ import java.util.Objects;
 public class NSumDemo {
 
     public static void main(String[] args) {
-        int[] nums = {1, 3, 5, 6};
-        int target = 9;
-        int[] ints = twoSum(nums, target);
-        System.out.println(Arrays.toString(ints));
+//        int[] nums = {1, 3, 5, 6};
+//        int target = 9;
+//        int[] ints = twoSum(nums, target);
+//        System.out.println(Arrays.toString(ints));
+        int[] nums = {1, 3, 1, 2, 2, 3};
+        int target = 4;
+        List<int[]> list = twoSumPlus(nums, target);
+        list.forEach(ints -> System.out.println(Arrays.toString(ints)));
     }
 
 
@@ -46,5 +53,44 @@ public class NSumDemo {
             }
         }
         return new int[]{};
+    }
+
+    /*
+     * nums 中可能有多对儿元素之和都等于 target，请你的算法返回所有和为 target 的元素对儿，其中不能出现重复
+     * 比如说输入为 nums = [1,3,1,2,2,3], target = 4，那么算法返回的结果就是：[[1,3],[2,2]]
+     **/
+    private static List<int[]> twoSumPlus(int[] nums, int target) {
+        if (Objects.isNull(nums)) {
+            return new ArrayList<>();
+        }
+        //先排序
+        Arrays.sort(nums);
+        List<int[]> res = new ArrayList<>(10);
+        //左右指针
+        int left = 0, right = nums.length - 1;
+        while (left < right) {
+            int sum = nums[left] + nums[right];
+            //记录左右指针对应的值
+            int leftValue = nums[left], rightValue = nums[right];
+            if (sum < target) {
+                while (left < right && nums[left] == leftValue) {
+                    left++;
+                }
+            } else if (sum > target) {
+                while (left < right && nums[right] == rightValue) {
+                    right--;
+                }
+            } else {
+                res.add(new int[]{leftValue, rightValue});
+                //需要跳过所有重复的元素
+                while (left < right && nums[left] == leftValue) {
+                    left++;
+                }
+                while (left < right && nums[right] == rightValue) {
+                    right--;
+                }
+            }
+        }
+        return res;
     }
 }
