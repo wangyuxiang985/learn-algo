@@ -23,9 +23,73 @@ public class NSumDemo {
 //        list.forEach(ints -> System.out.println(Arrays.toString(ints)));
         int[] nums = {-1, 0, 1, 2, -1, -4};
         int target = 0;
-        List<List<Integer>> list = threeSumPlus(nums, target);
-        System.out.println(list);
+//        List<List<Integer>> list = threeSumPlus(nums, target);
+//        System.out.println(list);
+        Arrays.sort(nums);
+        List<List<Integer>> lists = nSumPlus(nums, 3, 0, target);
+        System.out.println(lists);
 
+    }
+
+    /**
+     * 解决nSum问题，在调用本函数前，被求数组一定要先排序，因为这是一个递归函数，如果拿到内部排序大大的浪费时间
+     * @param nums 排完序的目标数组
+     * @param n 代表nSum问题
+     * @param start 递归开始值
+     * @param target nSum问题中的目标值
+     * @return java.util.List<java.util.List<java.lang.Integer>>
+    **/
+    private static List<List<Integer>> nSumPlus(int[] nums, int n, int start, int target) {
+        int length = nums.length;
+        List<List<Integer>> res = new ArrayList<>(10);
+        //结束条件
+        if (n < 2 || length < n) {
+            return res;
+        }
+        if (n == 2) {
+            //2Sum问题是个基础
+            int leftIndex = start, rightIndex = length - 1;
+            while (leftIndex < rightIndex) {
+                //sum
+                int leftValue = nums[leftIndex], rightValue = nums[rightIndex];
+                int sum = leftValue + rightValue;
+                if (sum < target) {
+                    while (leftIndex < rightIndex && nums[leftIndex] == leftValue) {
+                        leftIndex++;
+                    }
+                } else if (sum > target) {
+                    while (leftIndex < rightIndex && nums[rightIndex] == rightValue) {
+                        rightIndex--;
+                    }
+                } else {
+                    List<Integer> tmpList = new ArrayList<>(10);
+                    tmpList.add(leftValue);
+                    tmpList.add(rightValue);
+                    res.add(tmpList);
+                    while (leftIndex < rightIndex && nums[leftIndex] == leftValue) {
+                        leftIndex++;
+                    }
+                    while (leftIndex < rightIndex && nums[rightIndex] == rightValue) {
+                        rightIndex--;
+                    }
+                }
+
+            }
+        } else {
+            //多sum问题 当 n>2 时递归调用 (n-1)Sum
+            for (int i = start; i < length; i++) {
+                List<List<Integer>> lists = nSumPlus(nums, n - 1, i + 1, target - nums[i]);
+                for (List<Integer> list : lists) {
+                    //(n-1)sum + n[i] 就是nSum结果
+                    list.add(nums[i]);
+                    res.add(list);
+                }
+                while (i < length - 1 && nums[i] == nums[i+1]){
+                    i++;
+                }
+            }
+        }
+        return res;
     }
 
     /*
