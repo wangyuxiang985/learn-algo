@@ -23,8 +23,8 @@ public class NSumDemo {
 //        list.forEach(ints -> System.out.println(Arrays.toString(ints)));
         int[] nums = {-1, 0, 1, 2, -1, -4};
         int target = 0;
-        List<int[]> list = threeSumPlus(nums, target);
-        list.forEach(ints -> System.out.println(Arrays.toString(ints)));
+        List<List<Integer>> list = threeSumPlus(nums, target);
+        System.out.println(list);
 
     }
 
@@ -36,27 +36,22 @@ public class NSumDemo {
      * [[-1, 0, 1],[-1, -1, 2]]
      *
     **/
-    private static List<int[]> threeSumPlus(int[] nums, int target) {
+    private static List<List<Integer>> threeSumPlus(int[] nums, int target) {
         if (Objects.isNull(nums)) {
             return new ArrayList<>();
         }
         //数组排序
         Arrays.sort(nums);
         int length = nums.length;
-        List<int[]> res = new ArrayList<>(10);
+        List<List<Integer>> res = new ArrayList<>(10);
         // 穷举第一个数，后两个求和
         for (int i = 0; i < length; i++) {
 
-            List<int[]> twoSumList = twoSum(nums, i + 1, target - nums[i]);
+            List<List<Integer>> twoSumList = twoSum(nums, i + 1, target - nums[i]);
             //如果存在满足条件的二元数组，再加上nums[i]就是结果
-            for (int[] ints : twoSumList) {
-                List<Integer> tmpList = new ArrayList<Integer>(10){{
-                    add(ints[0]);
-                    add(ints[1]);
-                }};
-                tmpList.add(nums[i]);
-                res.add(new int[]{
-                    tmpList.get(0), tmpList.get(1), tmpList.get(2)});
+            for (List<Integer> list : twoSumList) {
+                list.add(nums[i]);
+                res.add(list);
             }
             //跳过第一个数字重复的情况，否则有重复结果
             while (i < length - 1 && nums[i] == nums[i + 1]) {
@@ -66,13 +61,13 @@ public class NSumDemo {
         return res;
     }
 
-    private static List<int[]> twoSum(int[] nums, int start, int target) {
+    private static List<List<Integer>> twoSum(int[] nums, int start, int target) {
         if (Objects.isNull(nums)) {
             return new ArrayList<>();
         }
         //先排序
         Arrays.sort(nums);
-        List<int[]> res = new ArrayList<>(10);
+        List<List<Integer>> res = new ArrayList<>(10);
         //左右指针
         int left = start, right = nums.length - 1;
         while (left < right) {
@@ -88,7 +83,10 @@ public class NSumDemo {
                     right--;
                 }
             } else {
-                res.add(new int[]{leftValue, rightValue});
+                List<Integer> tmpList = new ArrayList<>(10);
+                tmpList.add(leftValue);
+                tmpList.add(rightValue);
+                res.add(tmpList);
                 //需要跳过所有重复的元素
                 while (left < right && nums[left] == leftValue) {
                     left++;
