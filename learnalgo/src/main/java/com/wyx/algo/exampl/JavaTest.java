@@ -1,5 +1,8 @@
 package com.wyx.algo.exampl;
 
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+
 /**
  * @ClassName JavaTest
  * @Description java坑题
@@ -16,7 +19,6 @@ public class JavaTest {
 //        f(null); //编译出错1）精确匹配->2）基本数据类型（自动转换成更大范围）->3）封装类（自动拆箱与装箱）->4）子类向上转型依次匹配->5）可变参数匹配。
 //        子类向上转型，两者的父类都是object类（null默认类型是object），因而会同时匹配上两者，编译器会报Ambiguous method call. Both错误
 //        g(1);//1）精确匹配->2）基本数据类型（自动转换成更大范围）->3）封装类（自动拆箱与装箱）->4）子类向上转型依次匹配->5）可变参数匹配，本题是进行到第二步匹配上了。
-
 
     }
 
