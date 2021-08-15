@@ -1,0 +1,15 @@
+package com.wyx.algo.exampl.designpatterns.bridge;
+
+/**
+ * @ClassName SourceSub2
+ * @Description TODO
+ * @Author yuxiang
+ * @Date 2021/8/11
+ * @Version 1.0
+ **/
+public class SourceSub2 implements Sourceable{
+    @Override
+    public void method() {
+        System.out.println("this is SourceSub2 method()");
+    }
+}
